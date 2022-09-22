@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html><head>
+  <title>SponsorBlock ID Generator</title>
+  <style>
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 80vh;
+    }
+    body, input, button, a, .hero {
+      background-color: #111;
+      color: #ddd;
+      font-size: 20px;
+    }
+    input {
+      width: 64ch;
+    }
+    button {
+      border-width: 1px;
+      border-style: solid;
+      border-color: #777;
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+    }
+  </style>
+</head>
+<body>
+  <pre class="hero">
+    <label for="privateid">Private ID (do not share):</label>
+    <div class="row">
+      <input id="privateid">
+      <button class="copy" id="copy-privateid" onclick="copy('privateid')">📋</button>
+    </div>
+    <label for="publicid">Public ID (share freely):</label>
+    <div class="row">
+      <input id="publicid">
+      <button class="copy" id="copy-publicid" onclick="copy('publicid')">📋</button>
+    </div>
+    <br>
+    <button onclick="generate()">Generate new PrivateID</button>
+    <button onclick="derive()">Derive PublicID from PrivateID</button>
+    <a download="sponsorblock-id-backup.txt" href="#" id="blob-download">Download Backup</a>
+  </pre>
+  <pre>
+  <footer>
+    No data stored or sent, everything done locally.
+    PLEASE backup your privateID
+    <a href="https://github.com/mchangrh/sb-idgen">GitHub</a>
+  </footer></pre>
+  <script src="generate.js"></script>
+  <script>
+    async function generate() {
+      const publicField = document.getElementById("publicid");
+      const privateidField = document.getElementById("privateid");
+      const privateid = generateUserID();
+      const publicid = await multiHash(privateid);
+      publicField.value = publicid;
+      privateidField.value = privateid;
+      generateBlob(privateid, publicid);
+      const copyButtons = document.querySelectorAll(".copy");
+      copyButtons.forEach(button => button.innerText = "📋");
+    }
+    async function derive() {
+      const publicField = document.getElementById("publicid");
+      const privateidField = document.getElementById("privateid");
+      const privateid = privateidField.value;
+      const publicid = await multiHash(privateid);
+      publicField.value = publicid;
+      generateBlob(privateid, publicid);
+      const copyButtons = document.querySelectorAll(".copy");
+      copyButtons.forEach(button => button.innerText = "📋");
+      if (privateid.length < 30) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
+    }
+    function copy(id) {
+      const copyText = document.getElementById(id).value;
+      const button = document.getElementById("copy-" + id);
+      navigator.clipboard.writeText(copyText)
+      button.innerText = "✅";
+    }
+  </script>
+</body></html>
