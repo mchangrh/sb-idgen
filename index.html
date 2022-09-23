@@ -45,8 +45,7 @@
     <button onclick="derive()">Derive PublicID from PrivateID</button>
     <a download="sponsorblock-id-backup.txt" href="#" id="blob-download">Download Backup</a>
   </pre>
-  <pre>
-  <footer>
+  <pre><footer>
     No data stored or sent, everything done locally.
     PLEASE backup your privateID
     <a href="https://github.com/mchangrh/sb-idgen">GitHub</a>
@@ -73,7 +72,7 @@
       generateBlob(privateid, publicid);
       const copyButtons = document.querySelectorAll(".copy");
       copyButtons.forEach(button => button.innerText = "📋");
-      if (privateid.length < 30) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
+      if (privateid.length < 32) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
     }
     function copy(id) {
       const copyText = document.getElementById(id).value;
