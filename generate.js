@@ -1,6 +1,7 @@
 // https://github.com/ajayyy/SponsorBlock/blob/master/src/utils/genericUtils.ts#L132
-function generateUserID(length = 36) {
+function generateUserID() {
   const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const length = 36;
   let result = "";
   if (window.crypto && window.crypto.getRandomValues) {
     const values = new Uint32Array(length);
