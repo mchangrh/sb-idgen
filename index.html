@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html><head>
+  <meta name="color-scheme" content="dark">
   <title>SponsorBlock ID Generator</title>
   <style>
     .hero {
@@ -11,13 +12,12 @@
     }
     body, input, button, a, .hero {
       background-color: #111;
-      color: #ddd;
       font-size: 20px;
     }
     input {
       width: 64ch;
     }
-    button {
+    button, input {
       border-width: 1px;
       border-style: solid;
       border-color: #777;
@@ -52,27 +52,26 @@
   </footer></pre>
   <script src="generate.js"></script>
   <script>
+    const publicIdField = document.getElementById("publicid");
+    const privateIdField = document.getElementById("privateid");
     async function generate() {
-      const publicField = document.getElementById("publicid");
-      const privateidField = document.getElementById("privateid");
-      const privateid = generateUserID();
-      const publicid = await multiHash(privateid);
-      publicField.value = publicid;
-      privateidField.value = privateid;
-      generateBlob(privateid, publicid);
-      const copyButtons = document.querySelectorAll(".copy");
-      copyButtons.forEach(button => button.innerText = "📋");
+      const privateId = generateUserID();
+      const publicId = await multiHash(privateId);
+      publicIdField.value = publicId;
+      privateIdField.value = privateId;
+      setupFields(privateId, publicId)
     }
     async function derive() {
-      const publicField = document.getElementById("publicid");
-      const privateidField = document.getElementById("privateid");
-      const privateid = privateidField.value;
-      const publicid = await multiHash(privateid);
-      publicField.value = publicid;
-      generateBlob(privateid, publicid);
+      const privateId = privateIdField.value;
+      const publicId = await multiHash(privateId);
+      publicField.value = publicId;
+      setupFields(privateId, publicId)
+      if (privateId.length < 32) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
+    }
+    function setupFields(privateId, publicId) {
+      generateBlob(privateId, publicId);
       const copyButtons = document.querySelectorAll(".copy");
       copyButtons.forEach(button => button.innerText = "📋");
-      if (privateid.length < 32) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
     }
     function copy(id) {
       const copyText = document.getElementById(id).value;
