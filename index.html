@@ -64,7 +64,7 @@
     async function derive() {
       const privateId = privateIdField.value;
       const publicId = await multiHash(privateId);
-      publicField.value = publicId;
+      publicIdField.value = publicId;
       setupFields(privateId, publicId)
       if (privateId.length < 32) alert("WARNING: PrivateID is too short to be secure. Please generate a new one.");
     }
